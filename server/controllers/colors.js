@@ -25,5 +25,16 @@ module.exports = {
         Color.create(req.body)
             .then(newColor => res.json(newColor))
             .catch(creationErrors => res.status(400).json(creationErrors));
+    },
+
+    delete: (req, res) => {
+        Color.deleteOne({_id: req.params.id})
+            .then(response => res.json(response))
+            .catch(err => res.json(err))
+    },
+    update: (req, res) => {
+        Color.findOneAndUpdate({_id: req.params.id}, req.body, {runValidators: true, new: true})
+            .then(color => res.json(color))
+            .catch(err => res.json(err))
     }
 }

@@ -26,6 +26,7 @@ const Color = ({id}) => {
             {loaded && <div>
                 <p>{color.name}</p>
                 <p>{color.hex}</p>
+                <p><Link to={`/update/${id}`}>Update!</Link></p>
             </div>}
 
             <p><Link to="/">Go back?</Link></p>

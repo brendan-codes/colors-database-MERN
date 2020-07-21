@@ -6,7 +6,7 @@ import Colors from './views/Colors';
 import Color from './views/Color';
 import CreateColor from './views/CreateColor';
 import './App.css';
-import Axios from 'axios';
+import UpdateColor from './views/UpdateColor';
 
 function App() {
 
@@ -27,17 +27,35 @@ function App() {
         })
   }
 
+  const deleteColor = (id) => {
+    setColors(colors.filter(color => color._id !== id));
+  }
+
   const addColor = (color) => {
     setColors([...colors, color])
   };
+
+  const updateColor = (id, color) => {
+    let idx = 0;
+    for(let i = 0; i<colors.length; i++){
+      if(colors[i]._id === id){
+        idx = i;
+      }
+    }
+    const colorsCopy = [...colors];
+    colorsCopy[idx] = {name: color.name, hex: color.hex}
+
+    setColors(colorsCopy);
+  }
 
   return (
     <div className="App">
       <h1>Welcome to the Color app!</h1>
       <Router>
-        <Colors path="/" colors={colors}></Colors>
+        <Colors path="/" colors={colors} deleteColor={deleteColor}></Colors>
         <Color path="/color/:id"></Color>
         <CreateColor path="/new" addColor={addColor} getAllColorsAPI={getAllColorsAPI}></CreateColor>
+        <UpdateColor path="/update/:id" updateColor={updateColor}></UpdateColor>
       </Router>
     </div>
   );
