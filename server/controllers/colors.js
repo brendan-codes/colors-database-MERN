@@ -30,11 +30,11 @@ module.exports = {
     delete: (req, res) => {
         Color.deleteOne({_id: req.params.id})
             .then(response => res.json(response))
-            .catch(err => res.json(err))
+            .catch(err => res.status(400).json(err))
     },
     update: (req, res) => {
         Color.findOneAndUpdate({_id: req.params.id}, req.body, {runValidators: true, new: true})
             .then(color => res.json(color))
-            .catch(err => res.json(err))
+            .catch(err => res.status(400).json(err))
     }
 }

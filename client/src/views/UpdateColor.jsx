@@ -8,17 +8,18 @@ const UpdateColor = ({id, updateColor}) => {
 
   const [name, setName] = useState("");
   const [hex, setHex] = useState("");
+  const [errors, setErrors] = useState([]);
 
-    useEffect(() => {
-        axios.get(`http://localhost:9001/api/colors/${id}`)
-            .then(response => {
-                setName(response.data.name);
-                setHex(response.data.hex);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, []);
+  useEffect(() => {
+      axios.get(`http://localhost:9001/api/colors/${id}`)
+          .then(response => {
+              setName(response.data.name);
+              setHex(response.data.hex);
+          })
+          .catch(err => {
+              console.log(err);
+          })
+  }, []);
 
   const formHandler = (e) => {
     e.preventDefault();
@@ -37,15 +38,22 @@ const UpdateColor = ({id, updateColor}) => {
         navigate("/");
       })
       .catch(err => {
-        console.log(err.response.data.errors);
-        setName("");
-        setHex("");
+
+        const errorsArray = [];
+        for(const key of Object.keys(err.response.data.errors)){
+          errorsArray.push(err.response.data.errors[key].properties.message);
+        };
+
+        setErrors(errorsArray);
       })
   }
 
   return (
     <div className="App">
       <div>
+        <div>
+           {errors.map((err, i) => <p key={i}>{err}</p>)}
+        </div>
         <form onSubmit={formHandler}>
           <p>Name your color:</p>
           <input type='text' value={name} onChange={(e) => setName(e.target.value)}></input>
